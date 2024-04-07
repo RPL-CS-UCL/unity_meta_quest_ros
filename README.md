@@ -8,7 +8,8 @@ this package contains the unity app and all the necessary dependencies to stream
 
 
 
-# TO DO list
+# TODO list
+- [ ] make installation guide
 - [ ] testing sending data over ros
 - [ ] add buttons and create the publisher 
 - [ ] make flat inside Ros
