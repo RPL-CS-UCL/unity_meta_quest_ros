@@ -10,8 +10,8 @@ this package contains the unity app and all the necessary dependencies to stream
 
 # TODO list
 - [ ] make installation guide
-- [ ] testing sending data over ros
-- [ ] add buttons and create the publisher 
+- [x] testing sending data over ros
+- [x] add buttons and create the publisher 
 - [ ] make flat inside Ros
 - [ ] replace the sphere with the shape of the controller (looks nicer)
 - [ ] test sending 2d images from cameras to meta quest (I'm expecting a low frame rate here, -> maybe downsampling and upsampling images could help)
