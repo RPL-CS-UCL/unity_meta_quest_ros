@@ -4,6 +4,28 @@ this package contains the unity app and all the necessary dependencies to stream
 
 # installation guide
 
+## unity installation (meta quest machine - win)
+
+## ros installation (ros machine)
+
+### win machine
+
+### ubuntu machine
+
+## setup the unity project
+
+## compile the project
+
+### on the meta quest (apk)
+
+### on windows
+
+# running the code
+
+## on the ros machine
+
+## on the meta quest (windows and onboard)
+
 
 
 
