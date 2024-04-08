@@ -67,7 +67,7 @@ public class RosPublisherExample : MonoBehaviour
                 );
 
             // Create an array of PosRotMsg objects with two elements
-            PosRotMsg[] devicesArray = new PosRotMsg[] { controller_right, controller_left };
+            PosRotMsg[] devicesArray = new PosRotMsg[] {controller_right, controller_left, head_tracker};
 
             PosRotListMsg devices = new PosRotListMsg(devicesArray);
 
