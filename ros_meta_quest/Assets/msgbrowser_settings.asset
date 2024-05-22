@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c444d6f85828f1b4f9b89c7c387f9ddd, type: 3}
   m_Name: msgbrowser_settings
   m_EditorClassIdentifier: 
-  inputPath: C:/Users/RoboH/UnityProject/ros_packages_unity_meta_quest/unity_meta_quest_msgs
-  relativeOutPath: RosMessages
+  inputPath: C:/Users/jonem/Desktop/vrunity/unity_meta_quest_ros/ros_meta_quest/Assets/RosMessages
+  relativeOutPath: 
