@@ -1,0 +1,8 @@
+prefix=/Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/install
+
+Name: catkin_tools_prebuild
+Description: Description of catkin_tools_prebuild
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

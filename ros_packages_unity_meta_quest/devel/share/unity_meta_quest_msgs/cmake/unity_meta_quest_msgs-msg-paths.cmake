@@ -1,0 +1,1 @@
+/Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/.private/unity_meta_quest_msgs/share/unity_meta_quest_msgs/cmake/unity_meta_quest_msgs-msg-paths.cmake

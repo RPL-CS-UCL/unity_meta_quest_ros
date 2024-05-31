@@ -1,0 +1,8 @@
+prefix=/Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/install
+
+Name: unity_meta_quest_msgs
+Description: Description of unity_meta_quest_msgs
+Version: 0.0.1
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime
