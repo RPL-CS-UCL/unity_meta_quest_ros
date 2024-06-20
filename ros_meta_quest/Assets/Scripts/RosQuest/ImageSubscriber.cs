@@ -8,6 +8,10 @@ using System.Collections;
 using System.IO;
 using System.Drawing;
 using Unity.Barracuda;
+using Unity.VisualScripting;
+using UnityEngine.InputSystem;
+using System.Diagnostics;
+using System;
 
 public class ImageSubscriber: MonoBehaviour
 {
@@ -39,41 +43,37 @@ public class ImageSubscriber: MonoBehaviour
 
     RenderTexture rTexture;
 
-    Rect emptyRect = new Rect(0, 0, width*3, height*3);
+    Rect emptyRect = new Rect(0, 0, new_width, new_height);
 
     Tensor input_tensor;
     Tensor output_tensor;
 
-    //UnityEngine.Color[] pixels = new UnityEngine.Color[new_width * new_height];
+
+    [SerializeField] private Material m_material;
 
     // Use this for initialization
     void Start()
     {
-        Debug.Log("start");
+        //Debug.Log("start");
         m_RuntimeModel = Unity.Barracuda.ModelLoader.Load(modelAsset, false, false);
-        m_Worker = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, m_RuntimeModel); //ComputePrecompiled for GPU, CSharpBurst for CPU
+        //m_Worker = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, m_RuntimeModel); //ComputePrecompiled for GPU, CSharpBurst for CPU
+        m_Worker = WorkerFactory.CreateWorker(m_RuntimeModel, WorkerFactory.Device.GPU);
 
         texture = new Texture2D(width, height, TextureFormat.RGB24, false);
-        upsampled_texture = new Texture2D(width*3, height*3, TextureFormat.RGB24, false); // multiply height and width by model upscaling factor 
+        upsampled_texture = new Texture2D(new_width, new_height, TextureFormat.RGB24, false); // multiply height and width by model upscaling factor 
 
         ROSConnection.GetOrCreateInstance().Subscribe<RosImage>("/camera/image_compressed2", ImgCallback);
 
-        // Populate the Texture2D with the raw byte data
-        //pixelData = new Color32[width * height];
-
-        //for (int i = 0; i < pixelData.Length; i++)
-        //{
-        //int index = i * 3;
-        //pixelData[i] = new Color32(255,255,255,255);
-        //}
-
-        rTexture = new RenderTexture(width * 3, height * 3, 0);
+        rTexture = new RenderTexture(new_width, new_height, 0, RenderTextureFormat.Default);
+        //rTexture = new RenderTexture(new_width, new_height, colorFormat: UnityEngine.Experimental.Rendering.GraphicsFormat.R8_SRGB);//, readWrite: RenderTextureReadWrite.sRGB);
+        rTexture.enableRandomWrite = true; // Enable random write if needed
+        rTexture.Create();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log("Update");
+        
         if (TextureUpdated)
         {
             /*
@@ -93,95 +93,103 @@ public class ImageSubscriber: MonoBehaviour
             }
             */
 
-            /* -- UPSIDE DOWN
-            // Get pixel data from texture
-            UnityEngine.Color[] pixels = texture.GetPixels();
-
-            // Convert pixel data to float array
-            float[] floatArray = new float[pixels.Length * 3];
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                floatArray[i * 3] = pixels[i].r;
-                floatArray[i * 3 + 1] = pixels[i].g;
-                floatArray[i * 3 + 2] = pixels[i].b;
-            }
-
-            // Create tensor from float array
-            input_tensor = new Tensor(1, texture.height, texture.width, 3, floatArray);
-            */
-
             
             input_tensor = new Tensor(texture);
 
             // run the model on the tensor
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
             m_Worker.Execute(input_tensor); //FIX
+            //stopwatch.Stop();
+            //TimeSpan elapsedTime = stopwatch.Elapsed;
+            //print($"Elapsed Time: {elapsedTime.TotalMilliseconds} ms");
+
             input_tensor.Dispose();
             output_tensor = m_Worker.PeekOutput();
-            
+
+            /*
+            UnityEngine.Debug.Log("Output Tensor Shape: " + output_tensor.shape);
+            for (int i = 0; i < Mathf.Min(10, output_tensor.length); i++)
+            {
+                UnityEngine.Debug.Log("Tensor Value [" + i + "]: " + output_tensor[i]);
+            }
+            */
             // convert output tensor to RenderTexture
             output_tensor.ToRenderTexture(rTexture);
             output_tensor.Dispose();
 
+
+            /*
             // convert RenderTexture to Texture2D
             RenderTexture.active = rTexture;
             upsampled_texture.ReadPixels(emptyRect, 0, 0);
-            
+
+            // Print some pixel values for verification
+            for (int y = 0; y < Mathf.Min(10, rTexture.height); y++)
+            {
+                for (int x = 0; x < Mathf.Min(10, rTexture.width); x++)
+                {
+                    UnityEngine.Color pixelColor = upsampled_texture.GetPixel(x, y);
+                    UnityEngine.Debug.Log("Pixel Color [" + x + ", " + y + "]: " + pixelColor);
+                }
+            }
+            */
+            //TextureConverter.RenderToTexture(texture, tensor)
+
+
+
             //upsampled_texture = texture;
 
 
 
 
-            // convert output tensor to texture -- UPSIDE DOWN
+            // convert output tensor to texture -- TOO SLOW
             /*
-            for (int y = 0; y < height*3; y++)
+            for (int y = 0; y < new_height; y++)
             {
-                for (int x = 0; x < width*3; x++)
+                for (int x = 0; x < new_width; x++)
                 {
-                    //int index = (y * (width*3) + x) * 3;
                     float r = output_tensor[0, y, x, 0];
                     float g = output_tensor[0, y, x, 1];
                     float b = output_tensor[0, y, x, 2];
-
-                    upsampled_texture.SetPixel(x, y, new UnityEngine.Color(r, g, b), 0); 
+                    UnityEngine.Color color = new UnityEngine.Color(r, g, b, 1.0f);
+                    upsampled_texture.SetPixel(x, new_height - 1 - y, color); 
                 }
             }
             */
 
-
-            /* -- UPSIDE DOWN
-            // Extract data from tensor
-            float[] data = output_tensor.ToReadOnlyArray();
-            for (int y = 0; y < output_tensor.height; y++)
-            {
-                for (int x = 0; x < output_tensor.width; x++)
-                {
-                    int i = (y * output_tensor.width + x) * 3;
-                    pixels[y * output_tensor.width + x] = new UnityEngine.Color(
-                        data[i],
-                        data[i + 1],
-                        data[i + 2]
-                    );
-                }
-            }
-            // Set pixel data and apply changes
-            upsampled_texture.SetPixels(pixels);
-            */
 
             //input_tensor.Dispose();
             //output_tensor.Dispose();
-            upsampled_texture.Apply();
+            //upsampled_texture.Apply();
 
+            m_material.mainTexture = texture;//rTexture;
+
+            //RenderTexture.active = null;
+            
             // Assign the texture to the UI Image component
-            m_displayImage.sprite = Sprite.Create(upsampled_texture, new Rect(0, 0, upsampled_texture.width, upsampled_texture.height), new Vector2(0.5f, 0.5f));
+            //m_displayImage.sprite = Sprite.Create(upsampled_texture, new Rect(0, 0, upsampled_texture.width, upsampled_texture.height), new Vector2(0.5f, 0.5f));
             TextureUpdated = false;
         }
     }
 
     private void ImgCallback(RosImage msgIn)
     {
-        Debug.Log("Callback");
 
-        texture.LoadImage(msgIn.data);
+        if (TextureUpdated)
+            return;
+        byte[] jpegData = msgIn.data;
+        texture.LoadImage(jpegData);
+
+        // Optional: Manually adjust color channels if necessary
+        UnityEngine.Color[] pixels = texture.GetPixels();
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            UnityEngine.Color pixel = pixels[i];
+            pixels[i] = new UnityEngine.Color(pixel.b, pixel.g, pixel.r); // Swap R and B channels
+        }
+        texture.SetPixels(pixels);
+        texture.Apply();
 
         // Set flag to update texture in the main thread
         TextureUpdated = true;
@@ -189,7 +197,7 @@ public class ImageSubscriber: MonoBehaviour
 
     public void OnDestroy()
     {
-        Debug.Log("Destroy");
+        //Debug.Log("Destroy");
         m_Worker.Dispose();
         //input_tensor.Dispose();
         //output_tensor.Dispose();
