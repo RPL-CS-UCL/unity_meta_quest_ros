@@ -17,7 +17,7 @@ public class RosMetaManager : MonoBehaviour
 
     [SerializeField] private UserInputManager m_userInputManager;
 
-    [SerializeField] private float publishMessageFrequency = 0.5f;
+    [SerializeField] private float publishMessageFrequency = 0.01f;
     private float m_timeElapsed;
     private ROSConnection m_ros;
 
@@ -126,10 +126,12 @@ public class RosMetaManager : MonoBehaviour
 
     void Update()
     {
+        //UnityEngine.Debug.Log(Time.deltaTime);
         m_timeElapsed += Time.deltaTime;
 
-        if (m_timeElapsed <= publishMessageFrequency)
-            return;
+        //MUCH faster with this removed
+        //if (m_timeElapsed <= publishMessageFrequency)
+            //return;
 
         PublishControllers();
         PublishPosRot();

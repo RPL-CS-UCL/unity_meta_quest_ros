@@ -1,0 +1,566 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1033655611511494263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6465153084105639636}
+  - component: {fileID: 2951370877922382762}
+  - component: {fileID: 3885203032551487005}
+  - component: {fileID: -6384135251189783628}
+  - component: {fileID: -504653064320732589}
+  - component: {fileID: 1966455376350089338}
+  - component: {fileID: 1077570174452147890}
+  - component: {fileID: -8565716626114620365}
+  - component: {fileID: -6084514102648904433}
+  - component: {fileID: 4440853249007724164}
+  - component: {fileID: 5762230668711174969}
+  - component: {fileID: -4169116547636625263}
+  - component: {fileID: 8745986166721081259}
+  - component: {fileID: 5352817776983407384}
+  - component: {fileID: -541284941513211877}
+  - component: {fileID: 504837317140635251}
+  - component: {fileID: 2111152762679596303}
+  - component: {fileID: -9108567987967020665}
+  - component: {fileID: 5572140345584889666}
+  - component: {fileID: 2914107648396894946}
+  - component: {fileID: 6811968032809623022}
+  - component: {fileID: 9211041378989704042}
+  - component: {fileID: -7713281120877059813}
+  m_Layer: 0
+  m_Name: VisualTemplate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6465153084105639636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.70441604, y: -0.06162845, z: -0.06162845, w: 0.70441604}
+  m_LocalPosition: {x: 20, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: -10, z: 0}
+--- !u!2083052967 &2951370877922382762
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 395dac2d0eed9954ea0d54674800cf88, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array: []
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array: []
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &3885203032551487005
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &-6384135251189783628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdafc37f32b176349b1684c4455b98e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExecuteInEditor: 1
+  m_Bindings:
+  - {fileID: -504653064320732589}
+  - {fileID: 1966455376350089338}
+  - {fileID: 1077570174452147890}
+  - {fileID: -8565716626114620365}
+  - {fileID: -6084514102648904433}
+  - {fileID: 4440853249007724164}
+  - {fileID: 5762230668711174969}
+  - {fileID: -4169116547636625263}
+  - {fileID: 8745986166721081259}
+  - {fileID: 5352817776983407384}
+  - {fileID: -541284941513211877}
+  - {fileID: 504837317140635251}
+  - {fileID: 2111152762679596303}
+  - {fileID: -9108567987967020665}
+  - {fileID: 5572140345584889666}
+  - {fileID: 2914107648396894946}
+  - {fileID: 6811968032809623022}
+  - {fileID: 9211041378989704042}
+  - {fileID: -7713281120877059813}
+  m_VisualEffect: {fileID: 2951370877922382762}
+--- !u!114 &-504653064320732589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &1966455376350089338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &1077570174452147890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-8565716626114620365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-6084514102648904433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &4440853249007724164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &5762230668711174969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-4169116547636625263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &8745986166721081259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &5352817776983407384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-541284941513211877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &504837317140635251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &2111152762679596303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-9108567987967020665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &5572140345584889666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &2914107648396894946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &6811968032809623022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &9211041378989704042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer
+--- !u!114 &-7713281120877059813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033655611511494263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b23e4c8461b80e458b0acda332b8a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplatData: {fileID: 0}
+  _splatCountProperty:
+    m_Name: SplatCount
+  _positionBufferProperty:
+    m_Name: PositionBuffer
+  _axisBufferProperty:
+    m_Name: AxisBuffer
+  _colorBufferProperty:
+    m_Name: ColorBuffer

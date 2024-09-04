@@ -23,11 +23,13 @@ public class ImageSubscriber: MonoBehaviour
     private Model m_RuntimeModel;
 
 
-    static int width = 640; //1920
-    static int height = 480; //1080
+    static int width = 320;//640; //1920
+    static int height = 240;//480; //1080
 
-    static int new_width = width * 3;
-    static int new_height = height * 3;
+    static int scaling_factor = 4;
+
+    static int new_width = width * scaling_factor;
+    static int new_height = height * scaling_factor;
 
     // Decode the ROS image message to a Texture2D
     Texture2D texture;
@@ -62,7 +64,7 @@ public class ImageSubscriber: MonoBehaviour
         texture = new Texture2D(width, height, TextureFormat.RGB24, false);
         upsampled_texture = new Texture2D(new_width, new_height, TextureFormat.RGB24, false); // multiply height and width by model upscaling factor 
 
-        ROSConnection.GetOrCreateInstance().Subscribe<RosImage>("/camera/image_compressed2", ImgCallback);
+        ROSConnection.GetOrCreateInstance().Subscribe<RosImage>("/camera/image_compressed2", ImgCallback); //("/robot/front_ptz_camera/image_color/compressed", ImgCallback);
 
         rTexture = new RenderTexture(new_width, new_height, 0, RenderTextureFormat.Default);
         //rTexture = new RenderTexture(new_width, new_height, colorFormat: UnityEngine.Experimental.Rendering.GraphicsFormat.R8_SRGB);//, readWrite: RenderTextureReadWrite.sRGB);
@@ -95,6 +97,7 @@ public class ImageSubscriber: MonoBehaviour
 
             
             input_tensor = new Tensor(texture);
+            //print("input tensor " + input_tensor.shape);
 
             // run the model on the tensor
             //Stopwatch stopwatch = new Stopwatch();
@@ -106,6 +109,7 @@ public class ImageSubscriber: MonoBehaviour
 
             input_tensor.Dispose();
             output_tensor = m_Worker.PeekOutput();
+            //print("output tensor " + output_tensor.shape);
 
             /*
             UnityEngine.Debug.Log("Output Tensor Shape: " + output_tensor.shape);
@@ -123,7 +127,12 @@ public class ImageSubscriber: MonoBehaviour
             // convert RenderTexture to Texture2D
             RenderTexture.active = rTexture;
             upsampled_texture.ReadPixels(emptyRect, 0, 0);
+            upsampled_texture.Apply();
+            RenderTexture.active = null;
+            rTexture.Release();
+            */
 
+            /*
             // Print some pixel values for verification
             for (int y = 0; y < Mathf.Min(10, rTexture.height); y++)
             {
@@ -168,28 +177,35 @@ public class ImageSubscriber: MonoBehaviour
             //RenderTexture.active = null;
             
             // Assign the texture to the UI Image component
-            //m_displayImage.sprite = Sprite.Create(upsampled_texture, new Rect(0, 0, upsampled_texture.width, upsampled_texture.height), new Vector2(0.5f, 0.5f));
+            m_displayImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             TextureUpdated = false;
         }
     }
 
     private void ImgCallback(RosImage msgIn)
     {
-
+        UnityEngine.Debug.Log("callback");
+        
         if (TextureUpdated)
             return;
         byte[] jpegData = msgIn.data;
         texture.LoadImage(jpegData);
+        //print("loaded image " + texture.Size());
 
+        
         // Optional: Manually adjust color channels if necessary
+        
         UnityEngine.Color[] pixels = texture.GetPixels();
+        
         for (int i = 0; i < pixels.Length; i++)
         {
             UnityEngine.Color pixel = pixels[i];
             pixels[i] = new UnityEngine.Color(pixel.b, pixel.g, pixel.r); // Swap R and B channels
         }
+        
         texture.SetPixels(pixels);
         texture.Apply();
+        
 
         // Set flag to update texture in the main thread
         TextureUpdated = true;
