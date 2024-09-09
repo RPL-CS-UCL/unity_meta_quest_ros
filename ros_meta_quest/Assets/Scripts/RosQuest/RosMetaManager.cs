@@ -9,6 +9,7 @@ public class RosMetaManager : MonoBehaviour
     [SerializeField] private string m_rightControllerTopicName = "controller_right";
     [SerializeField] private string m_leftControllerTopicName = "controller_left";
     [SerializeField] private string m_posRotTopicName = "pos_rot_meta_quest";
+    [SerializeField] private string m_rightControllerAdjustedTopicName = "controller_right_adjusted";
     private GameObject m_XRRig;
     private GameObject m_headGO;
     private GameObject m_leftControllerGO;
@@ -28,6 +29,7 @@ public class RosMetaManager : MonoBehaviour
         m_ros.RegisterPublisher<ControllerStateMsg>(m_leftControllerTopicName);
         m_ros.RegisterPublisher<ControllerStateMsg>(m_rightControllerTopicName);
         m_ros.RegisterPublisher<PosRotListMsg>(m_posRotTopicName);
+        m_ros.RegisterPublisher<ControllerStateMsg>(m_rightControllerAdjustedTopicName);
 
 
 
@@ -77,8 +79,19 @@ public class RosMetaManager : MonoBehaviour
             "head_tracker"
             );
 
+        PosRotMsg controllerRight_adjusted = new PosRotMsg(
+            m_rightControllerGO.transform.position.x - m_headGO.transform.position.x,
+            m_rightControllerGO.transform.position.y - m_headGO.transform.position.y,
+            m_rightControllerGO.transform.position.z - m_headGO.transform.position.z,
+            m_rightControllerGO.transform.rotation.x,
+            m_rightControllerGO.transform.rotation.y,
+            m_rightControllerGO.transform.rotation.z,
+            m_rightControllerGO.transform.rotation.w,
+            "controller_right_adjusted"
+        );
+
         // Create an array of PosRotMsg objects with two elements
-        PosRotMsg[] devicesArray = new PosRotMsg[] { controllerRight, controllerLeft, headTracker };
+        PosRotMsg[] devicesArray = new PosRotMsg[] { controllerRight, controllerLeft, headTracker, controllerRight_adjusted };
 
         PosRotListMsg devices = new PosRotListMsg(devicesArray);
         m_ros.Publish(m_posRotTopicName, devices);

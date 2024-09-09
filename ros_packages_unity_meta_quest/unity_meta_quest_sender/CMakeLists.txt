@@ -14,8 +14,11 @@ catkin_package(CATKIN_DEPENDS
     message_runtime)
 
 catkin_install_python(PROGRAMS
-  scripts/position_service.py
-  scripts/color_publisher.py
+  scripts/image_publisher.py
+  scripts/move_base.py
+  scripts/image_data_collection.py
+  scripts/move_base.py
+  scripts/franka_teleop.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 using UnityEngine.InputSystem;
 using System.Diagnostics;
 using System;
+using UnityEngine.Rendering;
 
 public class ImageSubscriber: MonoBehaviour
 {
@@ -19,36 +20,36 @@ public class ImageSubscriber: MonoBehaviour
 
     //public UnityEngine.UI.RawImage rawImage;
 
-    public NNModel modelAsset;
-    private Model m_RuntimeModel;
+    //public NNModel modelAsset;
+    //private Model m_RuntimeModel;
 
 
     static int width = 320;//640; //1920
     static int height = 240;//480; //1080
 
-    static int scaling_factor = 4;
+    //static int scaling_factor = 4;
 
-    static int new_width = width * scaling_factor;
-    static int new_height = height * scaling_factor;
+    //static int new_width = width * scaling_factor;
+    //static int new_height = height * scaling_factor;
 
     // Decode the ROS image message to a Texture2D
     Texture2D texture;
 
-    Texture2D upsampled_texture;
+    //Texture2D upsampled_texture;
 
-    public Unity.Barracuda.IWorker m_Worker;
+    //public Unity.Barracuda.IWorker m_Worker;
 
     // Populate the Texture2D with the raw byte data
     //Color32[] pixelData;
 
     public bool TextureUpdated = true;
 
-    RenderTexture rTexture;
+    //RenderTexture rTexture;
 
-    Rect emptyRect = new Rect(0, 0, new_width, new_height);
+    //Rect emptyRect = new Rect(0, 0, new_width, new_height);
 
-    Tensor input_tensor;
-    Tensor output_tensor;
+    //Tensor input_tensor;
+    //Tensor output_tensor;
 
 
     [SerializeField] private Material m_material;
@@ -57,19 +58,19 @@ public class ImageSubscriber: MonoBehaviour
     void Start()
     {
         //Debug.Log("start");
-        m_RuntimeModel = Unity.Barracuda.ModelLoader.Load(modelAsset, false, false);
+        //m_RuntimeModel = Unity.Barracuda.ModelLoader.Load(modelAsset, false, false);
         //m_Worker = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, m_RuntimeModel); //ComputePrecompiled for GPU, CSharpBurst for CPU
-        m_Worker = WorkerFactory.CreateWorker(m_RuntimeModel, WorkerFactory.Device.GPU);
+        //m_Worker = WorkerFactory.CreateWorker(m_RuntimeModel, WorkerFactory.Device.GPU);
 
         texture = new Texture2D(width, height, TextureFormat.RGB24, false);
-        upsampled_texture = new Texture2D(new_width, new_height, TextureFormat.RGB24, false); // multiply height and width by model upscaling factor 
+        //upsampled_texture = new Texture2D(new_width, new_height, TextureFormat.RGB24, false); // multiply height and width by model upscaling factor 
 
         ROSConnection.GetOrCreateInstance().Subscribe<RosImage>("/camera/image_compressed2", ImgCallback); //("/robot/front_ptz_camera/image_color/compressed", ImgCallback);
 
-        rTexture = new RenderTexture(new_width, new_height, 0, RenderTextureFormat.Default);
+        //rTexture = new RenderTexture(new_width, new_height, 0, RenderTextureFormat.Default);
         //rTexture = new RenderTexture(new_width, new_height, colorFormat: UnityEngine.Experimental.Rendering.GraphicsFormat.R8_SRGB);//, readWrite: RenderTextureReadWrite.sRGB);
-        rTexture.enableRandomWrite = true; // Enable random write if needed
-        rTexture.Create();
+        //rTexture.enableRandomWrite = true; // Enable random write if needed
+        //rTexture.Create();
     }
 
     // Update is called once per frame
@@ -96,19 +97,19 @@ public class ImageSubscriber: MonoBehaviour
             */
 
             
-            input_tensor = new Tensor(texture);
+            //input_tensor = new Tensor(texture);
             //print("input tensor " + input_tensor.shape);
 
             // run the model on the tensor
             //Stopwatch stopwatch = new Stopwatch();
             //stopwatch.Start();
-            m_Worker.Execute(input_tensor); //FIX
+            //m_Worker.Execute(input_tensor); //FIX
             //stopwatch.Stop();
             //TimeSpan elapsedTime = stopwatch.Elapsed;
             //print($"Elapsed Time: {elapsedTime.TotalMilliseconds} ms");
 
-            input_tensor.Dispose();
-            output_tensor = m_Worker.PeekOutput();
+            //input_tensor.Dispose();
+            //output_tensor = m_Worker.PeekOutput();
             //print("output tensor " + output_tensor.shape);
 
             /*
@@ -119,8 +120,8 @@ public class ImageSubscriber: MonoBehaviour
             }
             */
             // convert output tensor to RenderTexture
-            output_tensor.ToRenderTexture(rTexture);
-            output_tensor.Dispose();
+            //output_tensor.ToRenderTexture(rTexture);
+            //output_tensor.Dispose();
 
 
             /*
@@ -177,7 +178,7 @@ public class ImageSubscriber: MonoBehaviour
             //RenderTexture.active = null;
             
             // Assign the texture to the UI Image component
-            m_displayImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            //m_displayImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             TextureUpdated = false;
         }
     }
@@ -205,17 +206,19 @@ public class ImageSubscriber: MonoBehaviour
         
         texture.SetPixels(pixels);
         texture.Apply();
-        
+
+        //m_material.mainTexture = texture;
+
 
         // Set flag to update texture in the main thread
         TextureUpdated = true;
     }
 
-    public void OnDestroy()
-    {
+    //public void OnDestroy()
+    //{
         //Debug.Log("Destroy");
-        m_Worker.Dispose();
+        //m_Worker.Dispose();
         //input_tensor.Dispose();
         //output_tensor.Dispose();
-    }
+    //}
 }
