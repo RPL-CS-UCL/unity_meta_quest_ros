@@ -185,7 +185,7 @@ public class ImageSubscriber: MonoBehaviour
 
     private void ImgCallback(RosImage msgIn)
     {
-        UnityEngine.Debug.Log("callback");
+        //UnityEngine.Debug.Log("callback");
         
         if (TextureUpdated)
             return;
