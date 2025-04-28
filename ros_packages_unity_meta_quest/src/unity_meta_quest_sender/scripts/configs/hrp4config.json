@@ -1,0 +1,78 @@
+{	
+    "sim": {
+        "time_step": 0.001,
+        "experiment_duration": 5,
+        "feet": [
+      {
+        "name": "FL",
+        "sensor_frame": "FL_foot_fixed",
+        "contact_link_name": "l_sole"
+      },
+      {
+        "name": "FR",
+        "sensor_frame": "FR_foot_fixed",
+        "contact_link_name": "r_sole"
+      }]
+    },
+    
+    
+    "robot_pybullet": {
+        "base_type": ["floating"],
+        "collision_enable": [0],
+        "robot_description_model":[""],
+        "urdf_path": ["hrp4_description/hrp4.urdf"],
+        "ros_urdf_path": "",
+        "init_link_base_position": [[0.007120698065811459, 0.025, 0.8667745993975244]],
+        "init_link_base_vel": [[0.0, 0.0, 0.0]],
+        "init_link_base_orientation": [[0, -0.2164396, 0, 0.976296 ]],
+        "init_link_base_ang_vel": [[0.0, 0.0, 0.0]],
+        "init_motor_angles_names":[["CHEST_P", "CHEST_Y", "NECK_P", "NECK_Y","R_HIP_Y", "R_HIP_R", "R_HIP_P", "R_KNEE_P", "R_ANKLE_P", "R_ANKLE_R","L_HIP_Y", "L_HIP_R", "L_HIP_P", "L_KNEE_P", "L_ANKLE_P", "L_ANKLE_R", 
+                                    "R_SHOULDER_P", "R_SHOULDER_R", "R_SHOULDER_Y", "R_ELBOW_P", "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]],
+        "init_motor_angles": [[0.0, 0.0, 0.0, 0.0, 0.0, -0.05235987755982988, -0.4363323129985824, 0.8726646259971648, -0.4363323129985824, 0.05235987755982988, 0.0, 0.05235987755982988, -0.4363323129985824, 0.8726646259971648, -0.4363323129985824, -0.05235987755982988, 0.06981317007977318, -0.13962634015954636, 0.0, -0.4363323129985824, 0.06981317007977318, 0.13962634015954636, 0.0, -0.4363323129985824]],
+        "init_motor_vel":[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]],
+        "motor_offset": [[]],
+        "motor_direction": [[]],
+        "motor_damping": [0],
+        "motor_damping_coeff": [0],
+        "motor_elastic_torque": [0],
+        "motor_elastic_coeff": [0],
+        "motor_inertia": [0],
+        "motor_inertia_coeff": [0],
+        "foot_friction": [2],
+        "foot_restitution": [0],
+        "enable_feet_joint_force_sensors": [1],
+        "floating_base_name": ["floating_base"],
+        "servo_pos_gains": [400],
+        "servo_vel_gains": [3],
+        "delay_measure_flag":[0],
+        "delay_measure_steps":[3],
+        "noise_flag":[0],
+        "robot_noise":[
+                {
+                    "joint_cov": 0.0001,
+                    "joint_vel_cov": 0.0001,
+                    "joint_acc_cov": 0.0001,
+                    "base_pos_cov": 0.0001,
+                    "base_ori_cov": 0.0001,
+                    "base_lin_vel_cov": 0.0001,
+                    "base_ang_vel_cov": 0.0001,
+                    "joint_torque_cov":0.0001
+                }
+        ]
+    },
+
+    "env_pybullet": {
+        "env_script_name": ""
+    },
+
+    "robot_pin": {
+        "base_type": ["floating"],
+        "robot_description_model": [""],
+        "urdf_path": ["hrp4_description/hrp4.urdf"],
+        "ros_urdf_path": [""],
+        "floating_base_name": ["floating_base"],
+        "joint_state_conversion_active": [1]
+    }
+  
+    
+}

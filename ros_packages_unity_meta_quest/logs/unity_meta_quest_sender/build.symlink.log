@@ -1,6 +1,0 @@
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/lib/unity_meta_quest_sender/position_service.py
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/lib/unity_meta_quest_sender/color_publisher.py
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/lib/unity_meta_quest_sender/cmake.lock
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/lib/pkgconfig/unity_meta_quest_sender.pc
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/share/unity_meta_quest_sender/cmake/unity_meta_quest_senderConfig-version.cmake
-Symlinking /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/share/unity_meta_quest_sender/cmake/unity_meta_quest_senderConfig.cmake

@@ -1,6 +1,0 @@
-devel_space: /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel
-install: false
-install_space: /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/install
-profile: default
-source_space: /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/src
-workspace: /Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest

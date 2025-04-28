@@ -1,1 +1,0 @@
-/Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/.private/ros_tcp_endpoint/share/ros_tcp_endpoint/cmake/ros_tcp_endpointConfig-version.cmake

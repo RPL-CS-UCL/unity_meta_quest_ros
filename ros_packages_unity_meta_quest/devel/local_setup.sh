@@ -1,1 +1,0 @@
-/Users/takuyab/unity_meta_quest_ros/ros_packages_unity_meta_quest/devel/.private/catkin_tools_prebuild/local_setup.sh
