@@ -33,7 +33,7 @@ public class RuntimeImporter : MonoBehaviour
 
 
 
-
+    public VisualEffectAsset effectAsset;
  
 
     //const string DefaultVfxPath = "Packages/jp.keijiro.splat-vfx/VFX/Splat.vfx";
@@ -49,6 +49,9 @@ public class RuntimeImporter : MonoBehaviour
         //Debug.Log(binderBase);
 
         var binder = binderBase.AddPropertyBinder<VFXSplatDataBinder>();
+       // VisualEffect vfx = go.GetComponent<VisualEffect>();
+        //vfx.visualEffectAsset = EditorResources.Load<VisualEffectAsset>(DefaultVfxPath);
+        //vfx.visualEffectAsset = Resources.Load<VisualEffectAsset>(DefaultVfxPath);
         binder.SplatData = data;
 
         return go;
@@ -71,7 +74,15 @@ public class RuntimeImporter : MonoBehaviour
     private void Update()
     {
         VisualEffect x = GetComponent<VisualEffect>();
-        x .visualEffectAsset = x.visualEffectAsset;
+        //x .visualEffectAsset = x.visualEffectAsset;
+
+        //UnityEngine.Debug.Log("x: "+ x);
+        //UnityEngine.Debug.Log("effectAsset: "+ effectAsset);
+
+        if (x != null && effectAsset != null)
+        {
+            x.visualEffectAsset = effectAsset;
+        }
 
 
 

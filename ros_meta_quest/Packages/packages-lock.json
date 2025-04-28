@@ -312,7 +312,7 @@
       "url": "https://packages.unity.com"
     },
     "jp.keijiro.splat-vfx": {
-      "version": "file:C:/Users/takuy/SplatVFX/jp.keijiro.splat-vfx",
+      "version": "file:C:/Users/RoboH/SplatVFX/jp.keijiro.splat-vfx",
       "depth": 0,
       "source": "local",
       "dependencies": {}

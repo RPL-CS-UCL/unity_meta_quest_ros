@@ -11,17 +11,25 @@ using static UnityEngine.Application;
 using UnityEngine.UI;
 using Unity.Robotics;
 using Unity.Robotics.UrdfImporter.Control;
+using PController;
+using Unity.VisualScripting;
 
 public class Quest_Franka_Trigger : MonoBehaviour
 {
     ROSConnection ros;
    
+    // franca_start -> we publish to denote that we triggered teleop
+    // new_pos -> we subscribe to recieve joint positions
+    // sphere_pos -> we publish the position of the end effector sphere so the Nuc can calculate joint positions
+
     public string topicName = "franca_start";
 // public string jointsTopicname = "new_pos";
     public string cartTopicName = "sphere_pos";
     
     public InputActionReference rightTriggerActionReference; // Reference to your right trigger InputAction
     public InputActionReference grabActionReference; // Reference to your grab InputAction
+    public InputActionReference xButtonActionReference; // Reference to your X button InputAction
+    public InputActionReference yButtonActionReference; // Reference to your Y button InputAction
 
     private bool hasRun = false;
 
@@ -32,14 +40,17 @@ public class Quest_Franka_Trigger : MonoBehaviour
     // Reference to the root GameObject of the robot arm (imported URDF).
     public GameObject robotArm;
     public GameObject endEffector;
-    public Controller controller;
+    public PandaController controller;
 
     public bool Calibrated;
+    public bool Joysticks;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         Calibrated = false;
+        Joysticks = false;
         // Start the ROS connection
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<BoolMessage>(topicName);
@@ -72,6 +83,20 @@ public class Quest_Franka_Trigger : MonoBehaviour
             grabActionReference.action.performed += OnGrabActionPerformed;
             grabActionReference.action.Enable();
         }
+
+        // Enable the input action for X button
+        if (xButtonActionReference != null && xButtonActionReference.action != null)
+        {
+            xButtonActionReference.action.performed += OnXButtonPressed;
+            xButtonActionReference.action.Enable();
+        }
+
+        // Enable the input action for Y button
+        if (yButtonActionReference != null && yButtonActionReference.action != null)
+        {
+            yButtonActionReference.action.performed += OnYButtonPressed;
+            yButtonActionReference.action.Enable();
+        }
     }
 
     void OnDisable()
@@ -89,6 +114,20 @@ public class Quest_Franka_Trigger : MonoBehaviour
             grabActionReference.action.performed -= OnGrabActionPerformed;
             grabActionReference.action.Disable();
         }
+
+        // Disable the input action for X button
+        if (xButtonActionReference != null && xButtonActionReference.action != null)
+        {
+            xButtonActionReference.action.performed -= OnXButtonPressed;
+            xButtonActionReference.action.Disable();
+        }
+
+        // Disable the input action for Y button
+        if (yButtonActionReference != null && yButtonActionReference.action != null)
+        {
+            yButtonActionReference.action.performed -= OnYButtonPressed;
+            yButtonActionReference.action.Disable();
+        }
     }
 
     
@@ -98,7 +137,7 @@ public class Quest_Franka_Trigger : MonoBehaviour
         //UnityEngine.Debug.Log(controller.m_jointAngles.Length);
         //return;
         //if (!robotArm.active) return;
-
+        
         if (controller.m_jointAngles.Length == 0) return;
         UnityEngine.Debug.Log("active");
         UnityEngine.Debug.Log(controller.enabled);
@@ -117,7 +156,8 @@ public class Quest_Franka_Trigger : MonoBehaviour
         controller.m_jointAngles[12] = 0;
         //UnityEngine.Debug.Log(targetSphere.transform.position);
         //UnityEngine.Debug.Log(endEffector.transform.position);
-        if (Calibrated == true) // && !attached  
+        
+        if (Calibrated == true && Joysticks == false) // && !attached  
         {
             UnityEngine.Debug.Log(targetSphere.transform.position);
             UnityEngine.Debug.Log(endEffector.transform.position);
@@ -128,21 +168,45 @@ public class Quest_Franka_Trigger : MonoBehaviour
             arrayMessage.data[0] = targetSphere.transform.position.z;
             arrayMessage.data[1] = -targetSphere.transform.position.x;
             arrayMessage.data[2] = targetSphere.transform.position.y - 0.55;
-            UnityEngine.Debug.Log(arrayMessage);
+            //UnityEngine.Debug.Log(arrayMessage);
             ros.Publish(cartTopicName, arrayMessage);
         }
         else
         {
             targetSphere.transform.position = endEffector.transform.position;
+            ArrayMessage arrayMessage = new ArrayMessage();
+            arrayMessage.data = new double[3];
+            // Populate the array with target sphere position (axes swapped for Franka frame of reference)
+            arrayMessage.data[0] = targetSphere.transform.position.z;
+            arrayMessage.data[1] = -targetSphere.transform.position.x;
+            arrayMessage.data[2] = targetSphere.transform.position.y - 0.55;
+            //UnityEngine.Debug.Log(arrayMessage);
+            ros.Publish(cartTopicName, arrayMessage);
         }
-            /*
-            if (!attached)
-            {
-                //UnityEngine.Debug.Log("not attached");
-                targetSphere.transform.position = endEffector.transform.position;
-            }
-            */
+        
+
+        /*
+        if (!(Calibrated == true && Joysticks == false))
+        {
+            targetSphere.transform.position = endEffector.transform.position;
         }
+        //UnityEngine.Debug.Log("calibrated");
+        ArrayMessage arrayMessage = new ArrayMessage();
+        arrayMessage.data = new double[3];
+        // Populate the array with target sphere position (axes swapped for Franka frame of reference)
+        arrayMessage.data[0] = targetSphere.transform.position.z;
+        arrayMessage.data[1] = -targetSphere.transform.position.x;
+        arrayMessage.data[2] = targetSphere.transform.position.y - 0.55;
+        //UnityEngine.Debug.Log(arrayMessage);
+        ros.Publish(cartTopicName, arrayMessage);
+        */
+        //if (!attached)
+        //{
+        //UnityEngine.Debug.Log("not attached");
+        //  targetSphere.transform.position = endEffector.transform.position;
+        //}
+
+    }
 
     private void Update()
     {
@@ -201,7 +265,16 @@ public class Quest_Franka_Trigger : MonoBehaviour
             UnityEngine.Debug.Log("trigger pressed");
             StartFranca();
         }
-        
+    }
+
+    private void OnXButtonPressed(InputAction.CallbackContext context)
+    {
+        Joysticks = false;
+    }
+
+    private void OnYButtonPressed(InputAction.CallbackContext context)
+    {
+        Joysticks = true;
     }
 
     // Update is called once per frame
@@ -216,5 +289,6 @@ public class Quest_Franka_Trigger : MonoBehaviour
         // Finally, send the message to ROS
         ros.Publish(topicName, message);
     }
+    
 }
     

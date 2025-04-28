@@ -6,14 +6,18 @@ using System.IO;
 public class ScreenshotCapture : MonoBehaviour
 {
     public int frameRate = 30;
-    public int totalFrames = 300;
+    public int totalFrames = 150;
     private int frameCount = 0;
     private string savePath;
 
     // Start is called before the first frame update
     void Start()
     {
-        savePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "user_study");
+        //savePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "user_study");
+        string unityProjectPath = Directory.GetParent(Application.dataPath).FullName;
+        string mainProjectPath = Directory.GetParent(unityProjectPath).FullName;
+        savePath = Path.Combine(mainProjectPath, "gaussian_splatting_setup", "splat_input", "input");
+        //UnityEngine.Debug.Log(savePath);
         if (!Directory.Exists(savePath))
         {
             Directory.CreateDirectory(savePath); 
