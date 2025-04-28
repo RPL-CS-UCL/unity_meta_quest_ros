@@ -1,117 +1,199 @@
-# unity_meta_quest_ros
+# VR Teleoperation Framework for Locomanipulation Tasks
+This is a user guide for all components in this project. Later versions will be simpler, more portable and possibly work on other platform/arm combinations. Right now this only uses images and uses COLMAP with gaussian splatting. This will be updated in the future when pointcloud mode is added.
 
-this package contains the Unity app and all the necessary dependencies to stream the meta quest information device over Ros Noetic. I Have only tested the app on board the Meta Quest visualizer but maybe with the app onboard the Windows computer more can be done in terms of performance
+There are 4 components to this system. Unity, arm routine, platform control and teleoperation. Unity is run on a PC with Windows and a GPU while the arm routine and teleoperation are run on the onboard Nuc. Platform control is handled across both.
 
-# installation guide
+## Repo Setup
+ - Use `git clone --recurse-submodules` when cloning on both the Nuc and the Unity machine to make sure you download all the required submodules
+ - Install Mamba (miniforge) from https://conda-forge.org/download/ on both machines
 
-## Setting up the meta quest visor
-first it is necessary to set up the meta quest visor. you need to create an account on the meta quest and you need to set it in developer mode.
-you can follow this guide with all the instructions for setting up your meta quest: https://developer.oculus.com/documentation/native/android/mobile-device-setup/
-after that, you need to set up the meta quest link to connect the meta quest to the computer. to do so follow this guide: https://www.meta.com/en-gb/help/quest/articles/headsets-and-accessories/oculus-link/set-up-link/
+### Unity Machine
+ - Open the Unity project (runs on 2023.1.19f1, builds for Android and Windows)
+ - Open `Window -> Package Manager` 
+ - Install the SplatVFX unity package from disk by selecting jp.keijiro.splat-vfx/package.json
+ - Get all relevant gaussian splatting dependencies (COLMAP, ImageMagik, FFMPEG)
+ - Modify Assets/gaussian_splatting_config.txt so first line is the path to the gaussian splatting folder and the second line is the path to the miniforge folder
+ - Build environment.yml in the gaussian splatting submodule
+ - Build transform.yml in unity_meta_quest_ros/gaussian_splatting_setup
+ - Open `Robotics -> Generate ROS Messages...`
+ - In ROS Message Browser in ROS message path make sure the path to unity_meta_quest_msgs/msg is correct
+ - Build the messages
 
-IMPORTANT to compile and deploy the app on the Meta Quest with Unity NEVER use the air link (which is the Meta Quest link but with wifi) and ONLY use the Meta Quest link with a USB-C cable connecting the Meta Quest to the Unity machine
+### Nuc
+ - Build ros_env.yml
 
-## unity installation (unity machine - win)
-once the meta quest has been prepared it is time to set up the unity environment. From this link https://docs.unity3d.com/hub/manual/InstallHub.html download the unity hub and follow the instruction for the windows installation.
-form the Unity hub you can install Unity. At the time this guide was written unity 2022.3 has been used. Once Unity is installed you need to add the xr interaction tool.
-to do so go to the tab windows->package manager and then here click on Packages: In project and select unity registry. Then here you can just use the search bar to find the xr interaction tool. for a comprehensive guide for installing the package go to https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@1.0/manual/index.html and do not forget to download the samples they are quite important.
-Once the interaction tool is installed you need to configure the environment to do so by following this [video](https://www.youtube.com/watch?v=zbqHNwDpi6Y&list=PLX8u1QKl_yPD4IQhcPlkqxMt35X2COvm0&index=1) on youtube
+## Physical Setup
+The Unity machine is entirely on it's own here. The Nuc is slightly more complicated. It needs a USB 3.0 to USB-C connection to the Intel RealSense camera on the end of the arm. It also needs 2 ethernet connections, one to the arm and one to the base. The Nuc only has one ethernet port so use an adapter here. To turn on the Franka, plug it into a wall socket and hit the power switch hidden in the corner.
 
-## ros installation (ros machine)
+For the Summit-XL, hit the power switch and the CPU button. The restart button will automatically be turned on. Turn off the emergency power button (yellow phone-sized object clipped onto the base) and then hit the reset button to turn it off. The router (big yellow thing with an antenna) should turn on and its light will be flashing. Be aware that the Summit-XL will take a few minutes to start up, you'll see and hear it calibrating/adjusting it's cameras.
 
-on the ros machine (which is the one that receives the messages sent from the Meta quest device) first, you need to create a mamba environment.
-so first install mamba/anaconda. after that, you can install the environment using this command
+## Network Setup
+Once the Franka is on, go to `192.168.2.100` in your browser and log in (username and password are both `eastrobotics`). Then unlock the joints, activate the FCI and make sure the black safety button is off (the lights on the Franka should be blue).
+
+For the Nuc, you need to first make sure that it has the correct ethernet connections to the base (LAN port) and arm. The IP (ipv4) for the arm connection can be any address starting with `192.168.2` that isn't already taken (since the arm itself has address `192.168.2.100`), so right now it uses one called `Profile 3` with address `192.168.2.76`. For the base, connect to the ethernet profile called `summit-xl`. This has address `192.168.0.170` and gateway `255.255.255.0`. In practice, this address can be whatever you want as long as it matches the ROS IP Address field in the ROS settings for the Unity project (Robotics -> ROS Settings -> ROS IP Address) and the TCP IP field of the TCP endpoint launch file ("tcp_ip" in `ros_ws/meta_summit_xl_ws/src/ROS-TCP-ENDPOINT/launch/endpoint.launch`).
+
+Finally, turn on the wifi hotspot. This will make it an extender of the Summit-XL router. Make sure that the Unity machine is connected to this hotspot (otherwise it won't reach the ROS master).
+
+Bear in mind that the ROS master is on the base while the TCP endpoint is on the Nuc. **These are not the same thing**. The PC connects to the Nuc through the TCP endpoint while the Nuc connects to the base/ROS master via ethernet.
+
+### ROS ###
+#### TCP Endpoint ####
+The address in the ROS settings of Unity must match the address of the endpoint launch file on the Nuc. This is because they are both the address of the Nuc in whatever wifi network you are running the PC and Nuc on. There are 3 options:
+- Nuc wifi extender: Fastest option, weird IP address `10.42.0.1`
+- Summit-xl router: Address starting with `192.168.0` (in this case `192.168.0.170`)
+- Netgear router: Address starting with `192.168.1` (in this case `192.168.1.37`)
+#### ROS Master ####
+The ROS master is on the Summit-XL and communicates over ethernet with the Nuc. Every time you run a terminal on the Nuc you need to run `export ROS_MASTER_URI=http://192.168.0.200:11311/` so the terminal knows that the master is at this IP (the Summit). You can use localhost instead for testing to set the Nuc as the ROS master but this means that you can't control the Summit. You also need to run `export ROS_IP=192.168.0.170` in every Nuc terminal since this makes the terminal visible on the ROS network (hence it is the IP of the Nuc on the Summit network).
+
+## Running the scripts
+The scripts are in various sub-packages in `ros_ws/meta_summit_xl_ws`. The order to run the scripts from first to last is: 
+
+ROS TCP endpoint -> Camera launch -> Franka routine/Base camera subscriber/Base movement/Teleop -> Unity
+
+You need to run the scripts by ssh from the Unity PC after connecting to the Nuc wifi hotspot. Use `ssh takuya@10.42.0.1`.
+
+Note that for all terminal windows you need to activate Mamba. You do this by running the command in `mamba_startup.txt` (file in desktop). 
+
+`eval "$(/home/takuya/miniforge3/bin/conda shell.bash hook)"`
+
+From here you can enter the necessary mamba environment with `conda activate <environment>`.
+
+### Unity ###
+Unity runs all it's scripts (`unity_meta_quest/ros_meta_quest`) whenever you run it in play mode or build and run. However, right now all the scripts on the Nuc need to be run manually (this will be automated later).
+
+Note that `Franka_Subscriber` uses intermediary files and scripts (`convert_ply_splat.py` and `transform_ply.py`) in `gaussian_splatting_setup` so there is no need to modify `gaussian-splatting` for this project to work.
+
+#### Relevant Scripts ####
+- `Assets/Scripts/Quest_Franka_Trigger` handles triggering the image collection and teleoperation
+- `Assets/Scripts/Franka_Subscriber` handles receiving the images, running gaussian splatting and translating the splat to Unity
+
+Panda controller (attached to base panda object) controls all the joints (articulation bodies in an articulation chain). Quest_Franka_Trigger instantiates the controller to set the recieved joint angles. Panda Gripper Articulation (script attached to panda_hand) takes in input and instantiates the controller to open/close the gripper. It also handles the physics of holding the objects in the gripper.
+
+### ROS TCP Endpoint
+For the ROS TCP endpoint start the `summit-xl` mamba environment in a new terminal window. Then go to `ros_ws/meta_summit_xl_ws` and run:
 
 ```
-mamba env create -f ros_env.yml
-conda activate ros_env
-```
-in a folder of the ros machine create a ros workspace (an empty folder with another empty folder inside called src)
-After that you need to download this repo https://github.com/Unity-Technologies/ROS-TCP-Endpoint or you can copy the one which is found under the ros_package_unity_meta_quest
-and copy it inside the src folder of the ros workspace. after that, you need to copy the unity_meta_quest_msgs into the ros workspace src folder
-
-### win machine
-to compile the ros packages in Windows you need to do the following:
-```
-catkin build (or catkin_make if it does not work)
-```
- and if everything is installed correctly you have to do
-
-```
-./devel/setup.bat
-```
-to update the ros workspace with the newly installed packages
-
-
-### ubuntu machine
-to compile the ros packages in Windows you need to do the following:
-```
-catkin build 
-```
- and if everything is installed correctly you have to do
-
-```
+catkin clean
+catkin build
 source ./devel/setup.bash
-```
-to update the ros workspace with the newly installed packages
-
- 
-
-
-
-## Set up the unity project with unity.robotics.ros-tcp-connector (unity machine)
-this guide has been tested by using Unity on a Windows 11 operating system
-once the ros enviroment is fully set go back to the Unity project contained in the current repository. Open the ros_meta_project in Unity and click on Robotics->Ros settings on the top bar. Here you have to set the IP of the ros machine and the TCP port (the same used in the launch file) as described in this ![image](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/1.png)
-After that under Robotics->Compile Ros messages you need to set the path the unity_meta_quest_msgs contained inside the unity_meta_quest_ros in this repository and then clicking on the name of the folder you need to build all the messages one by one. At the end, you should see something like ![this](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/2.png). 
-if in the top row the Robotics field is not present you need to install two packages using the same package manager described before. the only difference here is that you will have to install two packages that are contained in the dependencies/unity_packages folder of this repository. Installing local packages should be straightforward (I did encounter a few issues and going by memory I resolved that by zipping each package before importing it)
-
-## Compile the project
-Now that the project is fully set up is time to compile the project.
-
-### on the meta quest (apk)
-If the installation is for Android it means that the app will be installed directly on the Meta Quest device. 
-IMPORTANT!!! to deploy code on the meta quest DO NOT use airlink but proceed only with the meta link with the USB cable connected to the unity machine.
-To build click on the top bar inside Unity on File->build setting and ensure that an Android build setting is selected like in![figure](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/3.png). 
-click on build and run if you want to directly execute the code inside the meta quest. Otherwise, you can only compile the app and run it later
-
-### on windows
-
-if you compile on the unity machine (win) you need to go to  File->build setting click on Windows, Mac, Linux, and click on the switch platform button as shown in the ![image](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/4.png). Once this is done you can simply build the project or build and run the project as before. The difference here is that the app will be located in the unity machine and NOT on the meta quest. 
-I did not test this but I'm pretty sure that the Meta Quest connected with a USB cable will work. (airlink connection should be tested as well)
-
-# running the code
-
-## On the ROS machine
-to launch ROS-TCP-Endpoint first you need to update the  endpoint.launch. 
-for the <arg name="tcp_ip" default="IP_ADDR"> in place of IP_ADDR, you need to put the current IP of the ros computer which is connected to the same subnet to which the meta_quest is connected. 
-After that run in a terminal
-```
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
 roslaunch ros_tcp_endpoint endpoint.launch
 ```
 
-## on the meta quest (windows and onboard)
-- android app execution: in order to find the app in your meta quest you need to select the app and in the inner dropdown menu select unknown source. from this, you can run the app
-- windows app execution. with the Win app, you just have to launch the executable created after the compilation which is located in the folder that has been selected during the compilation process (usually I create a build folder inside the unity project for this purpose). Ensure that the meta quest is connected either with the cable or the airlink to the unity machine.
-
-
-# testing if everything is working
-
-to test if the meta quest and ros are communicating you can echo some topics by doing
+### Camera ###
+To start the camera make a new terminal windows in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
 
 ```
-rostopic echo /pos_rot_meta_quest
-rostopic echo /controller_left_state
-rostopic echo /controller_right_state
-
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+roslaunch realsense2_camera rs_camera.launch
 ```
 
+### Arm ###
+To run the Franka script make a new terminal window in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
 
-# TODO list
-- [x] make installation guide
-- [x] testing sending data over ros
-- [x] Add buttons and create the publisher 
-- [ ] Make a flat video feed inside Ros
-- [ ] Replace the sphere with the shape of the controller (looks nicer)
-- [ ] test sending 2d images from cameras to meta quest (I'm expecting a low frame rate here, -> maybe downsampling and upsampling images could help)
-- [ ] test sending 3d images from camera to meta quest for fully immersive operation (I'm expecting a very low frame rate here)
-- [ ] test with the Windows app rather than the Android app
+```
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+cd src/unity_meta_quest_sender/scripts
+python image_data_collection.py
+```
+
+### Base Camera ###
+To run the base camera subscriber script make a new terminal window in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
+
+```
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+cd src/unity_meta_quest_sender/scripts
+python image_publisher.py
+```
+
+### Base Movement ###
+To run the base movement script make a new terminal window in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
+
+```
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+src/unity_meta_quest_sender/scripts
+python move_base.py
+```
+
+### Teleoperation
+There are two scripts that need to be run for this to work: the controller and the intermediary control node.
+
+To run the intermediary control node make a new terminal window in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
+
+```
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+rosrun unity_meta_quest_sender franka_teleop.py
+```
+
+To run the controller make a new terminal window in the `Summit-XL` Mamba environment, go to `ros_ws/meta_summit_xl_ws` and run:
+
+```
+source ./devel/setup.bash
+export ROS_MASTER_URI=http://192.168.0.200:11311/
+export ROS_IP=192.168.0.170
+rosrun wb_quad_arm franka_teleop_inverse_kinematic_metaquest.py
+```
+
+(may be called wb_z1_spot)
+
+Note that for the scripts instead of running `python <script>` you should go to `ros_ws/meta_summit_xl_ws` and run `rosrun <package> <script>` instead, where the package is `unity_meta_quest_sender` for the base, arm and teleoperation scripts.
+
+## Usage
+Run the scripts in the correct order. If you intend to run everything, make sure you build and run the Unity project. **Do not run Unity in play mode** - the gaussian splatting screws up the rendering and it doesn't work. Only use play mode for testing/debugging purposes.
+
+Connect the Meta Quest 2 to the Unity PC via Quest Link. Use a physical cable - **do not use airlink, it's shit**. You should see two spheres where your hands/controllers are and a canvas in front of you with the front facing camera feed from the robot. Use the right joystick to move the Summit-XL remotely. 
+
+When you're ready, pull the right trigger to start the gaussian splatter generation process. You won't see anything new in the Unity environment immediately, but the arm will start it's routine taking and sending pictures to the PC. Once all the pictures are sent, COLMAP will run structure-from-motion on said images, and then the gaussian splatter will start training. Again, this is all in the background so you won't see anything until the final output. Once this is complete, the output `.ply` file will be converted to a `.splat` file and the result will be imported as a visual effect into the VR scene. This whole process currently takes under 10 minutes.
+
+To move the arm in VR, hold your right controller at the end-effector and press A (don't hold it). Move your controller slowly (the arm will follow it) and then press A again to release it.
+
+To open/close the gripper on the end-effector press B (single press, not hold).
+
+To switch to joystick control press the Y button on the left controller. To switch to end-effector dragging control press the X button on the left controller. Left joystick controls X and Y, right joystick controls up and down. Note that at the start it is automatically in dragging mode. When testing the baseline mode in user study you can't use the dragging mode so remember to press Y at the start.
+
+For the user study, press esc at the start to switch to 'baseline' mode.
+
+## Troubleshooting
+When troubleshooting, check the hardware setup first (easy fix), then the scripts (regular debugging) and finally ROS (harder).
+  ### Not reading from ROS node ### 
+  Run `rostopic list` to check that it's getting the node. If the robot nodes don't show up you probably forgot to run `export ROS_MASTER_URI=http://192.168.0.200:11311/` and `export ROS_IP=192.168.0.170`. If you run this after you start the camera it should also show a bunch of RealSense nodes.
+  ### Messages don't build ###
+  You forgot to run `source ./devel/setup.bash`.
+  ### Package/file not found when executing Rosrun
+  Try going back through the directories a few times (`cd ..`), you're probably inside the package you're looking for.
+  ### Splat not rendered
+  Make sure the splat vfx graph (in assets and in the splat vfx package) is EXACTLY as it is here:
+
+  ![splat VFX graph](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/splatvfx_graph.png?raw=true)
+  ### Teleoperation calibration not working
+  In Unity editor click on XR  Origin (XR Rig) and look at the Quest_Franka_Trigger component. Make sure it looks as follows:
+
+  ![QFT settings](https://github.com/RPL-CS-UCL/unity_meta_quest_ros/blob/main/images/QFT_settings.png?raw=true)
+  ### Misc ###
+  If in doubt just try switching out the ethernet connections - they're super dodgy.
+  
+  Esc key to switch to 'baseline' control mode for user study.
+
+  To generate splat of VR objects for user study:
+
+   - Disable camera component of main (XR Origin) camera 
+   - Enable Splat Camera
+   - Disable XR Interactor Line Visual component of both controllers
+   - Disable Mesh Renderer component of both controller spheres 
+
+  When stopping Unity executable press Alt + F4.
+
+  gaussian-splatting installation/environment issues: https://github.com/graphdeco-inria/gaussian-splatting/issues/332
+
+  With public variables in Unity scripts, adjust them through the editor, this takes priority over the value written in the script.
