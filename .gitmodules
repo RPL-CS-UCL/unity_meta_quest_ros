@@ -1,0 +1,21 @@
+[submodule "ros_packages_unity_meta_quest/src/ROS-TCP-Endpoint"]
+	path = ros_packages_unity_meta_quest/src/ROS-TCP-Endpoint
+	url = https://github.com/Unity-Technologies/ROS-TCP-Endpoint
+[submodule "ros_packages_unity_meta_quest/src/wb_quad_arm"]
+	path = ros_packages_unity_meta_quest/src/wb_quad_arm
+	url = https://github.com/RPL-CS-UCL/wb_quad_arm
+[submodule "ros_packages_unity_meta_quest/src/robotnik_sensors"]
+	path = ros_packages_unity_meta_quest/src/robotnik_sensors
+	url = https://github.com/RPL-CS-UCL/robotnik_sensors
+[submodule "ros_packages_unity_meta_quest/src/robotnik_msgs"]
+	path = ros_packages_unity_meta_quest/src/robotnik_msgs
+	url = https://github.com/RPL-CS-UCL/robotnik_msgs
+[submodule "ros_packages_unity_meta_quest/src/summit_xl_common"]
+	path = ros_packages_unity_meta_quest/src/summit_xl_common
+	url = https://github.com/RPL-CS-UCL/summit_xl_common
+[submodule "gaussian-splatting"]
+	path = gaussian-splatting
+	url = https://github.com/graphdeco-inria/gaussian-splatting
+[submodule "SplatVFX"]
+	path = SplatVFX
+	url = https://github.com/keijiro/SplatVFX
