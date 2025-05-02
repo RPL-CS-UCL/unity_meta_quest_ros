@@ -19,3 +19,6 @@
 [submodule "SplatVFX"]
 	path = SplatVFX
 	url = https://github.com/keijiro/SplatVFX
+[submodule "ros_packages_unity_meta_quest/src/phasespace_ros_node"]
+	path = ros_packages_unity_meta_quest/src/phasespace_ros_node
+	url = https://github.com/RPL-CS-UCL/phasespace_ros_node
