@@ -1,0 +1,20 @@
+<launch>
+  <arg name="animate_diffusion" default="false"/>
+  <arg name="animate_fps" default="100"/>
+
+
+  ### Visualisation 
+  <!-- <include file="$(find diffusion_teleop_vis)/launch/display.launch">
+  </include> -->
+
+  ### planning server
+  <node name="diffusion_teleop_planner_server" pkg="diffusion_teleop_planner" type="diffusion_teleop_planner_server.py" output="screen"/>
+
+  ### planning client
+  <node name="diffusion_teleop_planner_client" pkg="diffusion_teleop_planner" type="diffusion_teleop_planner_client.py" output="screen">
+    <param name="animate_diffusion" value="$(arg animate_diffusion)"/>
+    <param name="animate_fps" value="$(arg animate_fps)"/>
+
+  </node>
+  
+</launch>

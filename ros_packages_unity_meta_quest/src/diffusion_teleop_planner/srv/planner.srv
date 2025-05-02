@@ -1,0 +1,9 @@
+geometry_msgs/Point[] tracker_obs
+sensor_msgs/JointState arm_init_joint_state
+int32 predict_horizon
+---
+trajectory_msgs/JointTrajectory arm_pred_joint_traj
+diffusion_teleop_planner/jointTrajArray diffusion_hist_arm
+diffusion_teleop_planner/tracker_traj[] diffusion_hist_tracker
+
+bool success
